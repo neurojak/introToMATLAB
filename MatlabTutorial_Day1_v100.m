@@ -634,6 +634,7 @@ end
 % this is a list of [perhaps more exotic] MATLAB functions/commands with brief explanations compiled by 
 % other students:
 
+%From JasonK
 help specfun  % specialized math functions
 help datafun  % data analysis and Fourier transforms
 help stats    % help overview for statistics toolbox (if you have it installed)
@@ -648,23 +649,17 @@ why(1000) % a primitive Siri
 % data input functions?
 % dbstop if error
 % break
-%
+
+%From KyleF
+% bsxfun
+% nargin
+% ginput
+% diary(?)
+% cbrewer (not a function, but file with better colormaps)
+% mod
 
 %% USEFUL KEYBOARD SHORTCUTS
 % <shift + '['> for decrease indent
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
