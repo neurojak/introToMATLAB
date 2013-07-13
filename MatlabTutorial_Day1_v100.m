@@ -457,109 +457,240 @@ end
 % % There is also a npz format that you get with savez that can store multiple
 % % arrays / matrices and is compressed.
 
-%% PLOTTING
+%%%%%%%%%%%%%%%%%%%% PLOTTING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % One of MATLAB's greatest attributes is its powerful plotting cababilities.  Let's take a look:
 
-% % SciPy includes an entire plotting library called pylab (matplotlib).
-% 
-% import pylab as plt % Import the pylab module and call it plt
-% 
-% x = sp.linspace(-2*sp.pi, 2*sp.pi, 5000) % create a list of numbers
-% y = sp.sin(x)           % calculate the sin for each point
-% plt.figure()            % creates a new figure to plot in
-% plt.plot(x, y)          % plot x vs y
-% plt.title("sin curve")  % add a title
-% plt.xlabel("X values")  % add an x label
-% plt.ylabel("Y values")  % add a y label
-% plt.show()              % actually shows the graph
-% 
-% % There are an incredible number of options for plotting your data just the way
-% % you want, and you can have multiple plots at the same time
-% y2 = sp.cos(x)          % calculate the cos for each point
-% plt.figure()
-% plt.plot(x, y, color='red', linestyle='-.', label='sin(x)')
-% plt.plot(x, y2, color='green', linestyle='--', label='cos(x)')
-% % Note: instead of doing "color='red', linestyle='-.'" you can just do 'r-.'
-% % and instead of doing "color='green', linestyle='--'" you can just do 'g--'
-% plt.title("sine and cosine curves")
-% plt.xlabel("X values")
-% plt.ylabel("Y values")
-% plt.legend(loc='upper right') % uses the 'label' for each
-% plt.show()
-% 
-% % For a complete list of options see
-% % http://matplotlib.sourceforge.net/api/pyplot_api.html%matplotlib.pyplot.plot
-% 
-% % You can also do 2D plots:
-% % Make some interesting data
-% import matplotlib.mlab as mlab;
-% delta = 0.025
-% x = sp.arange(-3.0, 3.0, delta)
-% y = sp.arange(-2.0, 2.0, delta)
-% X, Y = sp.meshgrid(x, y)
-% Z1 = mlab.bivariate_normal(X, Y, 1.0, 1.0, 0.0, 0.0)
-% Z2 = mlab.bivariate_normal(X, Y, 1.5, 0.5, 1, 1)
-% Z = 10.0 * (Z2 - Z1)
-% 
-% % Contour plot
-% plt.figure()
-% plt.subplot(2, 1, 1) % num rows & cols, then the current subplot number
-% plt.contour(X, Y, Z)
-% plt.colorbar() % adds a color bar to the image
-% plt.title('Contour Plot')
-% 
-% % Image plot
-% def extent(X, Y): % Calculates the extent of X and Y values
-%   return sp.amin(X), sp.amax(X), sp.amin(Y), sp.amax(Y)
-% plt.subplot(2, 1, 2) % same num rows & cols above, then the next subplot number
-% plt.imshow(Z, extent=extent(X,Y), aspect='auto', origin='lower')
-% plt.colorbar()
-% plt.title('Image Plot')
-% plt.show()
-% 
-% % Other plot types that may be useful:
-% % line plot:    errorbar, fill, fill_betweenx
-% % box plots:    bar, barh, hist, boxplot
-% % vector field: quiver, barbs
-% % 2D plots:     contourf
-% % spectral:     specgram, psd, csd
-% % other:        polar, scatter, acorr, xcorr
-% 
-% % Other functions to perfect the figure:
-% % annotate, subtitle, clim (color scale limits)
-% % axis, twinx/twiny (create second axis), xscale/yscale (set log scale)
-% 
-% % See: http://matplotlib.sourceforge.net/
-% 
-% 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%% 3D Plotting %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% % pylab has 3D plotting built-in, but it takes just a little work to use it
-% 
-% % First you need to import the 3D library:
-% 
-% import mpl_toolkits.mplot3d
-% 
-% % Then you have to set the axes to 3D projections.
-% % If not using subplots create the figure like this:
-% %   plt.figure().gca(projection='3d')
-% % Otherwise create the subplot like this:
-% %   plt.gcf().add_subplot(1, 2, 1, projection='3d')
-% 
-% % Generate some interesting data
-% n_mer, n_long = 6, 11
-% phi = sp.arange(0.0, 2*sp.pi + 0.0005*sp.pi, sp.pi/1000.0)
-% mu = phi*n_mer
-% x = sp.cos(mu)*(1+sp.cos(n_long*mu/n_mer)*0.5)
-% y = sp.sin(mu)*(1+sp.cos(n_long*mu/n_mer)*0.5)
-% z = sp.sin(n_long*mu/n_mer)*0.5
-% 
-% % Plot the 3D Data
-% plt.figure().gca(projection='3d')
-% plt.plot(x, y, z)
-% plt.show()
-% 
-% % There are a ton more plotting types and options that you can use is. See:
-% % http://matplotlib.sourceforge.net/mpl_toolkits/mplot3d/tutorial.html
+% first lets generates some data:
+x = linspace(-2*pi, 2*pi, 50);        % creates a list of numbers
+y_sin = sin(x);                       % calculates the sin of each number in x
+plot(x,y_sin);                        % plot it!
+
+% NOTE: plot() also accepts a single argument, as in plot(y), but if used
+% in this fashion y will be plotted against its position in y. In other
+% words, plot(y) is equivalent to plot(1:numel(y),y)
+
+% but let's say you've got some more data you want to plot...
+y_cos = cos(x);
+plot(x,y_cos);
+
+% you'll notice that y_cos replaced y_sin on the axis of our first figure.
+% Unless specified, MATLAB plots on the current axis. It is good practice
+% to create a new figure before plotting unless you want to overwrite the
+% current axis.
+
+% lets plot our data on two seperate figures
+
+close all;      % close all open figures
+figure;         % creates a new figure
+plot(x,y_sin);  % plots our sin data
+figure;         % creates another figure
+plot(x,y_cos);  % plots our cos data
+
+% This is great but produces lots of figures: what if we want to use only  
+% one axis and "hold" our first dataset so that it isn't overwritten by 
+% the second...?
+
+close all;          % close all open figures
+figure;             % make a new figure;
+plot(x,y_sin);      % plot sin data
+hold on;            % hold all the data on the current axis
+plot(x,y_cos,'r');  % plot cos data in red (more on this later)
+
+% so long as hold is left "on" more data can be added...
+
+y_line = linspace(-1,1,numel(x));         % just a line
+plot(x,y_line,'g');     % plot tan data in green
+
+% ...but once we turn hold "off" on the current axis, all previous plots
+% are lost
+
+y_mod = mod(x,2)-1;    % modulo 2 of all values of x (normalized)
+hold off;               % turn off "hold" on the current axis
+plot(x,y_mod,'k');      % plot mod data in black. bye-bye previous data!
+
+%% SUBPLOT
+
+% You'll notice that like having multiple figures, having multiple lines on the
+% same plot begins to get cluttered. Luckily you can put multiple axes on
+% the same figure with subplot(m,n,p). Subplot(m,n,p) creates m rows and n
+% columns of axis on your figure and defines p as the current axis.
+
+close all;          % close all open figures
+figure;             % new figure
+subplot(2,2,1);     % 2x2 axes with #1 (top left) as the current axis
+plot(x,y_sin);      % plot sin data
+subplot(2,2,2);     % same setup, now on axis #2
+plot(x,y_cos,'r');  % plot cos data in red
+subplot(2,2,3);     % and so on...
+plot(x,y_line,'g');
+subplot(2,2,4);
+plot(x,y_mod,'k');
+
+%% PIZZAZZ!!
+
+% In previous plots we used a string as a third argument to plot() to 
+% create plots of different colors. We can use these strings to define
+% color, marker, and line type:
+
+close all;              % close all open figures
+figure('color','k');    % new figure, with a black background
+plot(x,y_sin,'ro:');    % plot sin data in red with circles at the points and a dotted line
+hold on;
+
+% These style shortcuts can be found by typing "help plot" in the command
+% line, or here: 
+
+%            b     blue          .     point              -     solid
+%            g     green         o     circle             :     dotted
+%            r     red           x     x-mark             -.    dashdot 
+%            c     cyan          +     plus               --    dashed   
+%            m     magenta       *     star             (none)  no line
+%            y     yellow        s     square
+%            k     black         d     diamond
+%            w     white         v     triangle (down)
+%                                ^     triangle (up)
+%                                <     triangle (left)
+%                                >     triangle (right)
+%                                p     pentagram
+%                                h     hexagram
+
+% Not enough colors for you? You can also specify any color directly using
+% RGB levels
+plot(x,y_cos,'color',[1 0.5 0.2],'marker','*','line','-.');
+hold off;
+
+% There are many additional ways beyond these simple commands to edit the
+% layout and style of plots and figures. Here are a few useful ones,
+% working with the figure we just made:
+
+xlabel('this is the x-axis label','FontSize',14,'color','w');       % label the x axis
+ylabel('this is the y-axis label','FontSize',14,'color','w');       % label the y axis
+axis tight;     % sometimes matlab makes the axis too big; this fits the plot snug
+grid on;        % what the hell! slap a grid on there! you only live once!
+legend('sine','cosine');    % a legend describing each data set
+title('THIS PLOT ROCKS!!!','FontSize',20,'Color','y');  % plot title
+
+% this is a very small subset of tools one can use to modify plots; if you 
+% can imagine it, there is probably a way to do it...
+
+%% SET, GET, & HANDLES
+
+% MATLAB identifies figures and axes using "handles" which the programmer
+% can use to selectively target specific figures or parts of figures using
+% the set() function
+
+close all;
+f_handle = figure;              % create new figure with handle "f_handle"
+p_handle = plot(x,y_sin);       % plot sin data with handle "p_handle"
+set(f_handle,'color','k');      % change figure color to black using its handle
+set(p_handle,'color','r');      % change line color to red
+
+% What if you didn't define a handle when creating a plot? MATLAB
+% automatically stores the current handles: gca ("get current axis") and
+% gcf ("get current figure").
+
+% a good way to understand how gca works is through subplotting:
+
+close all;          % close all open figures
+figure;             % new figure
+subplot(3,1,1);     % 2x2 axes with #1 (top left) as the current axis
+plot(x,y_sin);      % plot sin data
+subplot(3,1,2);     % same setup, now on axis #2
+plot(x,y_cos,'r');  % plot cos data in red
+subplot(3,1,3);     % and so on...
+plot(x,y_line,'g');
+
+% what happens if we make an additional plot? Where will it be placed?
+hold on;
+plot(x,y_mod,'k');          % plot mod data
+title('this is the gca!');  % make a title showing which is the current axis
+
+% now look at the figure and click on a different axis. Now repeat:
+hold on;
+plot(x,y_mod,'k');              % plot mod data
+title('this is the NEW gca!');  % make a title showing which is the current axis
+
+% even if you have not specified a handle, you can use 'gca' to target the
+% most recently modified axis.
+
+% using handles in conjunction with the functions set() and get() we can
+% modify parts of plots. For instance, say we want to make the axes of a
+% plot have the same limits:
+
+close all;
+figure;
+plot(x,y_sin);
+x_lim = get(gca,'xlim');    % get the limits of the x axis
+set(gca,'ylim',x_lim);      % set the y limits to be the same as the x limits
+
+%% FIGURE EDITOR
+% ??? need to add this ???
+
+%% GRADUATING FROM PLOT(): OTHER PLOTTING FUNCTIONS
+
+% MATLAB comes with several plotting functions designed for specific uses.
+% Here are a few favorites:
+
+close all;
+figure;
+subplot(3,1,1);
+plot(x,y_sin);      % old faithful: the plot function of our sine data
+subplot(3,1,2);
+bar(x,y_sin);       % a bar chart of the same data...
+subplot(3,1,3);
+scatter(x,y_sin);   % and a scatter plot of the same
+
+% MATLAB is also great for plotting 3 dimensional data, such as
+% scatter3()...
+
+close all;
+figure;
+scatter3(x,y_sin,y_cos);    % 3D scatter plot. Use the rotate tool to move the plot!
+
+% ...and surf(), which can matrices as surfaces:
+
+P = peaks(40);      % make some funky surface data
+close all;
+figure;
+surf(P);
+
+% By assigning the viewing angle with view(), one can use surf to make
+% heatplots
+
+view(90,90);        % view plot directly from above
+axis tight;         % fit axis to surface (remove white space)
+
+%% LIGHTS, CAMERA, ANIMATION!!
+
+% What's more badass than a killer MATLAB figure? One that moves...
+% overkill? perhaps... but MATLAB makes it easy, so let's take a look!
+
+close all;
+figure;             % make a new figure
+surf(P);            % plot surface
+axis off;           % turn off axis visibility
+axis vis3d;         % this locks the aspect ratio in 3D plots
+for i = 1:360;
+    camorbit(1,0);           % rotate the camera 1 degree
+    F(i) = getframe(gcf);    % grab the current figure and save it as a movie frame
+end
+
+movie(gcf,F);         % play your movie!
+
+% how bout a corkscrew for good measure?
+
+close all;
+figure;                 % make a new figure
+scatter3(y_sin,y_cos,x); % plot surface
+% view(90,90);            % start viewing directly from above
+axis off;               % turn off axis visibility
+axis vis3d;             % this locks the aspect ratio in 3D plots
+for i = 1:360;
+    camorbit(1,0);       % rotate the camera 1 degree
+    F(i) = getframe(gcf);    % grab the current figure and save it as a movie frame
+end
+
+movie(gcf,F);         % play your movie!
 
 
 %% EXERCISES
@@ -643,7 +774,7 @@ which + %which function '+' are you using? (can be used with any function)
 clc % clear command window
 why(1000) % a primitive Siri
 %eval % useful for automated data input
-%pack % memory defrag. might help if “out of memory” errors are getting you down
+%pack % memory defrag. might help if ï¿½out of memoryï¿½ errors are getting you down
 %squeeze % get rid of empty dimensions
 %sparse % converts a full matrix to sparse form 
 % data input functions?
