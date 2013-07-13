@@ -243,63 +243,190 @@ L = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 % b = x in l     % true  (the list contains 5)
 % b = x not in l % false
 
-%% ARRAYS
-% % So you know how we learned about lists? Well it turns out that for the most
-% % part you want to use a SciPy array and not a list. They are much faster and
-% % when used with SciPy the benefits are amazing. The good news is that they
-% % act almost the same as the normal Python lists.
-% 
-% % Some simple 1-dimension array examples
-% a1 = sp.array([1, 2, 3, 4])
-% a2 = sp.array([4, 3, 2, 1])
-% a3 = a1 + a2  % add array element-wise (normal Python lists would concatenate)
-% print a3      % prints [5, 5, 5, 5]
-% print a1[0]   % prints [1]
-% print a2[1:3] % prints [3, 2] (all the other slice operations work as well)
-% a4 = a1 * a2  % multiply arrays element-wise
-% a5 = sp.sin(a1); % takes sin of all elements
-% a6 = sp.log(a2); % takes natrual log of all elements
-% a7 = sp.exp(a6); % computes e^(x) for each x in the array
-% a8 = 10**a1;  % computes 10^(x) for each x in the array
-% py_list = a4.tolist() % converts to a Python list
-% 
-% % There are many more available functions, commonly used ones are:
-% %   sum, mean, std, cumsum, append, concatenate, amin, amax, argmin, argmax,
-% %   histogram, round, sign, unique
-% % For a complete list with examples see (just pretend "numpy" is "scipy"):
-% %   http://www.scipy.org/Numpy_Example_List_With_Doc
-% 
-% % More ways to make a 1-D array
-% r = sp.arange(0, 50, 1) % like Python range but with real-valued SciPy arrays
-% l = sp.linspace(0, 50, 10000) % 10000 element array from 0 to 50 (inclusive)
-% z = sp.zeros(50)        % an array of 50 zeros
-% o = sp.ones(50)         % an array of 50 ones
-% p = sp.pi*sp.ones(50)   % an array of 50 pis
+%% ARRAYS, MATRBWCES, and BWNDEXBWNG
 
-%% MATRICES
-% % SciPy also supports matrices in a very similar way to arrays:
-% m1 = sp.matrix([[1, 2, 3, 4],  % 3 rows and 4 columns
-%                 [4, 3, 2, 1],
-%                 a3 ])
-% m2 = sp.zeros((4, 5))          % 4 rows and 5 columns of zeros
-% 
-% % To access elements in a matrix:
-% m2[3,0] = 5   % Changes fourth row and first column to 5, same as m2[3][0]
-% print m1[1,:] % Prints the entire second row (same as m2[1])
-% print m1[:,2] % Prints the entire third column
-% % The other slice operations work as well:
-% print m1[1:3,1:3] % Prints: [[3 2]  % second row, second and third columns
-%                   %          [5 5]] % third row, second and third columns
-% 
-% % Matrices support +, *, **, sin, log, ... the same way that arrays do
-% 
-% t = sp.transpose(m2) % switch rows and columns in the array / matrix
-% t = m2.T % same as above
-% 
-% % Some common matrix functions to look into:
-% %   reshape, histogram2d, histogramdd
+% Now that you're fast on your way to being a pro in the MATrix LABratory,
+% its about time we saw some matrices.
 
+% most programming languages have ways of handling groups of data as in one
+% variable, often refered to as "arrays", "lists", or even "vectors" (not
+% to be confused with the physics vector). For numerical data, MATLAB deals
+% in matrices. For instance:
 
+my_first_array = [1:1:10]
+
+% is a 1x10 matrix from 1 to 10 increasing by 1. A 1 dimensional matrix is
+% often refered to as an "array" or "vector", but its no different from
+% other matrices. You'll also notice that:
+
+my_second_array = [1:10]                % is the same thing (we don't have to specify the incriment if it is 1...
+my_third_array = [1:2:10]               % ...but we do for other increments...)
+my_fourth_array = [1 4 5 2 8 47 1206]   % any numbers within brackets creates a matrix
+my_fifth_array = [1; 4; 5; 8; 47; 1206] % notice that this matrix is the same but rotated... more on that later
+
+% Unlike most other programming languages, MATLAB DOES NOT (!!) use a zero
+% index; that is, if you want the first element in an array, you use 1:
+
+my_first_array(1)              % the first element
+my_first_array(10)             % the last element
+my_first_array(end)            % also the last element (neato!)
+my_first_array(end-1)          % the second to last element
+
+% ---- !!! A BRIEF FORAY INTO IMAGE PROCESSING !!! ---- 
+
+% MATLAB is as phenomenal at image processing as it is boring to learn
+% about matrix manipulation. So before we go any further, lets play with a
+% fun matrix: an image.
+
+BW = imread('kristan_bw.pgm');       % reads in an image
+imshow(BW);                          % shows our image... er, BW mean, matrix
+
+% So you just made a 1 dimensional matrix (or "array") but instead of
+% making some random 2D matrix, this image will let us better visualize
+% what exactly we're doing. Each element of this matrix is 1 pixel, with a
+% value from 0 (black) to 255 (white). Let's see how big our matrix is:
+
+size(BW)         % the (surprise!) size of the matrix as (row x column)
+length(BW)       % length returns the longest dimension (same as max(size))
+numel(BW)        % the number of elements in BW
+
+% If we want to index into this matrix, we treat it the same way we would
+% an array, just with 2 dimensions.
+
+BW(1,1)      % returns the value in the first the first row and first column (the upper left corner)
+
+% We can assign values in the same manner
+
+new_BW = BW;      % copy BW for the sake of this experiment
+new_BW(1,1) = 0;  % reassign row 1 column 1 with the value 0
+imshow(new_BW);   % zoom into the upper left hand corner to see the effect
+
+% The colon (:) operate means "the entire ___" where ____ is row or column.
+% Check out what happens when we do this...
+
+close all;           % close image
+new_BW = BW;         % copy BW for the sake of this experiment
+new_BW(50,:) = 0;    % reassign all of row 50 with the value 0
+imshow(new_BW);      % let's see what happened...
+new_BW(:,50) = 255;  % reassign all of column 50 with the value 255
+imshow(new_BW)       % and again...
+new_BW(:,:) = 255;   % reassign the whole thing!!!
+imshow(new_BW)       % WHAT HAVE YOU DONE WITH BBWLL!!!
+
+% We can also index subportions of a matrix...
+
+close all;                    % close image
+left_BW = BW(:,1:50);         % all the rows of the 1st 50 columns
+imshow(left_BW);              % take look...
+center_BW = BW(50:100,:);     % the middle 50 rows, all columns
+imshow(center_BW);            % and again...
+middle_BW = BW(50:100,50:100);% right in the middle
+imshow(middle_BW);            % peakaboo!
+
+% Matrices can be rotated or, in the lingo, "transposed" with an apostrope
+
+close all;          % close image
+imshow(BW);         % bill upright
+imshow(BW');        % bill laying down
+
+% This may see obvious, but the same is true for 1 dimensional matrices.
+% You'll notice this is the same effect as when we formed an array using
+% spaces and semicolons, which you may remember from my_fourth_array and 
+% my_fifth_array above...
+
+my_first_array      % as we created it
+my_first_array'     % transposed
+
+% We can also join, or "concatenate", 2 matrices together so long as they
+% share the same length along the dimension we wish to concatenate. This is
+% as simple as using brackets and spaces or semicolons.
+
+close all;                          % close image
+bill_next_to_bill = [BW BW];        % concatenates matrices along rows
+imshow(bill_next_to_bill);          % twinsies!
+
+bill_on_top_of_bill = [BW; BW];     % concatenates matrices along columns
+imshow(bill_on_top_of_bill);        % bill get down from there!
+
+bill_laying_next_to_bill = [BW' BW];% concatenates a transposed matrix along rows
+imshow(bill_laying_next_to_bill);   % does kathy know?!
+
+% Let's enter a dimension further...
+
+RGB = imread('kristan_rgb.ppm');    % RGB image of bill
+imshow(RGB);                        % never looked better
+
+% RGB images are comprise of Red, Green, and Blue components...
+
+size(RGB)
+
+% you'll notice that the first 2 dimensions of this matrix are the same as
+% our BW image of bill; in RGB there are of 3 of these matrices, each one
+% making up the Red, Green, and Blue components of bill:
+
+close all;              % close all images
+red = RGB(:,:,1);       % the red component...
+green = RGB(:,:,2);     % the green...
+blue = RGB(:,:,3);      % and the blue.
+RGB_next_to_each_other  = [red green blue];     % for ease of viewing
+imshow(RGB_next_to_each_other);                 % bill you look pale!
+
+% Most MATLAB functions will treat matrices in an element-by-element
+% nature, but for certain basic operands (*,/,^,etc...) you need to specify
+% you want to act on each element specifically. This is a common source of
+% errors:
+
+close all;              % close all images
+imshow(red.^2);         % the square of each element of red (try red^2 in the command line...)
+imshow(red.*blue);      % multiplies each element in red by the element in the same position in blue (NOT the same as red*blue)
+
+% ------------------- %
+
+% PS: often you will make for loops to construct data. For instance, you
+% might be tempted to do something like this:
+
+% find the squares of each element in cat
+
+cat = [1 59 47 122 909];
+dog = [];
+for i = 1:numel(cat);
+    dog = [dog cat(i)^2];    % add the new value to the existing matrix dog
+end
+
+% MATLAB will often scold you, saying something like "this matrix changes
+% size" or "it is faster to preallocate". If you already know the size of
+% the matrix you are forming, it is always faster to "preallocate" by making
+% your matrix beforehand:
+
+% find the squares of each element in cat
+
+cat = [1 59 47 122 909];
+dog = zeros(size(cat));     % a matrix of zeros that is the same size as cat
+for i = 1:numel(cat);
+    dog(i) = cat(i)^2;
+end
+
+% you could really use anything to preallocate so long as it is the same
+% size, such as:
+
+ones(size(cat))                   % matrix of 1s that is the same size as cat
+linspace(pi,sqrt(13),numel(cat))  % a matrix with the same number of elements as cat from pi to the sqrt(13)
+rand(size(cat))                   % pseudorandom numbers of the same size of cat
+
+% --------------- %
+
+% PPS: since MATLAB is all about matrices, you'll often hear all the
+% coolest MATLABers (oxymoron?) talking about "vectorization" (not to be
+% confused with either 1 dimensional arrays or physics vectors). This is a
+% more advanced subject, suffice it to say that when one "vectorizes their 
+% code" they simplify their code by removing unnecessary for loops. For
+% instance the above for loop could be written as:
+
+dog = cat.^2;       % look how much faster!
+
+% There's always more than one way to square a cat...
+
+%% ------ MAY WANT TO INCLUDE COMMON ARRAY/MAT FUNCTIONS (SUM, MAX, MIN, RESHAPE, etc...) ----- %%%
 
 % in the workspace, show how to use the variable viewer while debugging (this can be useful for 
 % cell array indexing)
