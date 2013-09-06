@@ -203,46 +203,6 @@ num_str = num2str(2+2)  % the string "4"
 disp(['2 + 2 equals ', num2str(2+2)]) % prints '2+2 equals: 4'
 % search 'string' in help browser
 
-%% BOOLEANS
-a=5
-
-% Booleans are values that are either True or False. They are typically used in 
-% conditional tests (which we will get to in the very soon section). When using
-% a value as a boolean, any of the following are considered False:
-% None, False, 0, and empty strings, lists, and tuples : "" [] ()
-% Everything else is True
-
-% Boolean operations:
-t = true;
-f = not(t)    % False (not switches True to False and False to True)
-b = t&t  % True  (and is True only if both are True)
-b = t&f  % False (this and is False if either is False)
-b = f&f  % False
-b = t|t   % True  (or is True if either is True)
-b = t|f   % True
-b = f|f   % False
-
-% You can also make booleans by comparisons:
-x = 5
-b = x > 4  % true (greater than)
-b = x >= 4 % true (greater than or equal to)
-b = x < 4  % false (less than)
-b = x <= 4 % false (less than or equal to)
-b = x == 4 % false (equals)
-b = x ~= 4 % true (not equals), can also be written 5 <> 4
-b = 4 < x < 6  % true, same as 4 < x and x < 6
-b = 4 < x == 6 % false, same as 4 < x and x == 6
-
-% Comparisons work for strings as well:
-% b = 'aardvark' < 'zebra' % true
-% b = 'aardvark' < 'Zebra' % false (capitals come before lowercase letters)
-% b = 'Yes' == 'Yes' % true
-
-% There are special comparisons for lists (also work for strings and tuples):
-L = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-% b = x in l     % true  (the list contains 5)
-% b = x not in l % false
-
 %% ARRAYS, MATRBWCES, and BWNDEXBWNG
 
 % Now that you're fast on your way to being a pro in the MATrix LABratory,
@@ -426,14 +386,63 @@ dog = cat.^2;       % look how much faster!
 
 % There's always more than one way to square a cat...
 
-%% ------ MAY WANT TO INCLUDE COMMON ARRAY/MAT FUNCTIONS (SUM, MAX, MIN, RESHAPE, etc...) ----- %%%
+%% BOOLEANS or LOGICALS
 
-% in the workspace, show how to use the variable viewer while debugging (this can be useful for 
-% cell array indexing)
+% Booleans or Logicals as Matlab calls them are values that are either True
+% or False. They are typically used in conditional tests which we will get
+% to very soon or logical indexing which is also covered later.  Matlab
+% represents true and false by a 1 and 0 respectively, although if you
+% apply a boolean operator to a double, any non-zero number (except NaN) is
+% considered true.
 
-help elmat
 
-%% FINDING and BOOLEAN INDEXING
+% Boolean operations:
+t = true;
+f = not(t)      % False (not switches True to False and False to True)
+f = ~t          % False (~ is shorthand for not())
+t && t      % True  (and is True only if both are True)
+t && f      % False (this and is False if either is False)
+f && f      % False
+t || t      % True  (or is True if either is True)
+t || f      % True
+f || f      % False
+
+% You can also make booleans by comparisons:
+x = 5
+x > 4           % true (greater than)
+x >= 4          % true (greater than or equal to)
+x < 4           % false (less than)
+x <= 4          % false (less than or equal to)
+x == 4          % false (equals)
+x ~= 4          % true (not equals), can also be written 5 <> 4
+4 < x < 6       % true, although not the same as 4 < x and x < 6
+                % evaluates 4 < x which is true, then whether true (1) < 6
+4 < x == 5      % false, not the same as 4 < x and x == 5
+4 < x && x == 5 % true, same as 4 < x and x == 5
+
+% To compare strings you use strcmp or regexp if thats the way you swing:
+b = strcmp('aardvark', 'zebra')     % false
+b = strcmp('zebra', 'zebra')        % true
+b = strcmp('zebra', 'Zebra')        % false (capitalization matters)
+b = strcmpi('zebra', 'Zebra')       % true (ignores capitalization)
+
+% A very useful technique is utilizing logical arrays.  Above we used &&
+% and || as and and or, however, those only apply to single boolean values.
+% Too compare an array of logicals bitwise we use | and &.
+a = [t, f, f, t, f, f, t, t]
+b = [t, t, f, t, t, f, f, t]
+
+a & b
+a | b
+
+% There are many functions that return logical arrays such as the set
+% operation ismember:
+fib = [0 1 1 2 3 5 8 13 21 34 55 89 144];
+ismember(1:50, fib)     % which of the first 50 numbers are fibbonacci numbers
+~ismember(1:50, fib)    % which aren't
+
+
+%% FINDING and LOGICAL INDEXING
 
 % One of Matlab's strengths is it has a great gui and debugger (more on the
 % debugger later).  Anytime you are programming you can look at the
@@ -947,6 +956,8 @@ movie(gcf,F);         % play your movie!
 %% OTHER FAVORITE FUNCTIONS
 % this is a list of [perhaps more exotic] MATLAB functions/commands with brief explanations compiled by 
 % other students:
+
+help elmat
 
 %From JasonK
 help specfun  % specialized math functions
