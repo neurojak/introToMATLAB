@@ -433,28 +433,84 @@ dog = cat.^2;       % look how much faster!
 
 help elmat
 
-%% FINDING and INDEXING
-% % SciPy arrays and matrices can easily be searched. You can use the comparison
-% % operators we learned before to get an array / matrix of True / False values
-% % for each element like so:
-% 
-% a = sp.array([-1, 0, 5, -5, 7])
-% print a > 0
-% 
-% % To check if any are True:
-% print "Are any negative? "+str(sp.any(a < 0))
-% 
-% % If you need the indices, you can use the nonzero function (since False is
-% % equal to 0, it skips all Falses):
-% print sp.nonzero(a >= 0)     % prints [1,2,4]
-% 
-% % To get the values you can use the nonzero result as an index:
-% print a[sp.nonzero(a >= 0)]  % prints [0,5,7]
-% 
-% % These can be used to quickly find spike times (assuming low noise):
-% % time = some array...
-% % voltage = some array...
-% % spikes = time[sp.nonzero(voltage[:-1] < 0) && sp.nonzero(voltage[1:] >= 0)]
+%% FINDING and BOOLEAN INDEXING
+
+% One of Matlab's strengths is it has a great gui and debugger (more on the
+% debugger later).  Anytime you are programming you can look at the
+% Workspace (often on the top right column in matlab), which list all the
+% variables you've created.  If you have created a large variable whose
+% value doesn't display in the workspace window you can double click on the
+% variable name to open the Variable Editor to look at the variable in its
+% entirety.
+
+large_mat = round(magic(10) .* rand(10));      % supressed so it doesn't fill up our command window
+
+% Now find large_mat in the Workspace window and view it in the Variable
+% Editor.
+
+large_mat(3,5)
+
+% Notice how this is the value in the 3rd row and 5th column.  You can also
+% try all the nifty indexing and slicing techniques you learned above.
+% Now, what if you didn't know where you needed to look, but instead knew
+% what you were looking for.  Lets say we wanted to find all the even
+% numbers in our matrix larger than 60.
+
+large_bool = large_mat > 60 & mod(large_mat, 2) == 0;
+
+% This creates a matrix that is true where ever large_mat is both greater
+% than 60 and even (i.e. where the value mod 2 equals 0).
+% You can look at this in the Variable Editor if you'd like.
+
+% If we want to know how many even numbers larger than 60 there are you can
+% use sum.  An interesting note about sum, min and max is that they default
+% to find the sum/min/max for each column.  To work around this you can use
+% (:) or reshape(X, numel(X), 1).  RESHAPE(X,M,N) returns the M-by-N matrix
+% that contains the elements of X taken columnwise.
+
+sum(large_bool(:))
+sum(reshape(large_bool, numel(large_bool), 1))
+
+% If you would like the indices of the positions instead of a boolean
+% matrix you can use find
+large_indx = find(large_bool);
+
+% If you would like to get the actual values instead of a boolean matrix or
+% the indices you can use the boolean matrix to directly index large_mat,
+% or you can use the indices
+
+large_mat(large_bool)
+large_mat(large_indx)
+
+% Astute programmers will notice that to count the number of elements that
+% match your criteria one could also use
+
+numel(large_mat(large_bool))
+
+% So if you were actually only looking for the smallest even element larger
+% than 80 you could use
+
+min(large_mat(large_bool))
+
+% Also note that for simplicity we have separately defined large_bool but
+% for any of these commands you could explicitly include the definition of
+% large_bool instead.
+
+min(large_mat(large_mat > 60 & mod(large_mat, 2) == 0))
+
+% What is the largest number in your matrix that is less than 70 and
+% divisible by both 3 and 5?
+
+% In neuro, you can use these techniques to quickly find spike times
+% (assuming low noise):
+%       time = some array ...
+%       voltage = some array ...
+%       spikes = time(find(voltage(1:end-1) < 0 & voltage(2:end) > 0) + 1)
+%       spikes = time([0, voltage(1:end-1) < 0 & voltage(2:end) > 0])
+% This finds all times that the voltages pass from <0 to >0.  Note the +1
+% for the indices and added 0 at the beginning of the logical indexing to
+% account for the fact that you are looking at the change between two
+% adjacent positions.
 
 %% IF STATEMENTS
 % So now we get into the interesting stuff. If statements let you run a chunk
