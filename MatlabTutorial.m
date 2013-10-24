@@ -5,10 +5,12 @@
 % version 1.00, Fall 2013
 %
 % This script (a 'script' is just a piece of code that doesn't require any inputs, as opposed to a
-% 'function', which does) is a brief introduction to programming in MATLAB, Day 1 of a 2-day course. 
+% 'function', which does) is a brief introduction to programming in MATLAB, which is intended to be
+% completed in a few hours, possibly a over couple evenings.
+%
 % Even if you are already familiar with programming, we recommend that you step through this to make 
 % sure that everyone is on the same page. The tutorial is meant to be stepped through in Debug mode,
-% by placing a break point on the first executable line (in the editor, click on the blank space
+% by placing a breakpoint on the first executable line (in the editor, click on the blank space
 % just to the right of the line # and a red dot should appear). Then press F5 to run until the next 
 % breakpoint, and F10 to execute only the next line of code (or F11 to 'step into' that line if it 
 % contains a function). It can be helpful to view the main (i.e. '>>') command window at the same 
@@ -76,6 +78,7 @@ x =...
 
 clear x; % delete variable x from your workspace
 clear all; % clear the workspace of all variables to free up memory and organize yourself
+clc; % clears the command window
 
 % One of MATLAB's greatest strengths as a programming language is its documentation.
 % At any time if you want to know what a function does you can use the help function like so:
@@ -135,52 +138,53 @@ y = lcm(0,1);.
 
 %% ARRAYS, MATRICES, and INDEXING
 % Now that you're fast on your way to being a pro in the MATrix LABratory,
-% its about time we saw some matrices.
+% its about time we get to some matrices.
 
 % Most programming languages have ways of handling groups of data/values as one
 % variable, often refered to as "arrays", "lists", or even "vectors" (not
 % to be confused with the physics vector). Everything in MATLAB is based on
 % arrays, and if there are multiple dimensions we can call them "matrices". Let's start simple:
 
-my_first_array = [1:1:10] % The colon operator also allows you to create an equally spaced vector of values using the more general form "start:step:end"
+my_first_array = [1:1:10] % 
+% is a 1x10 matrix from 1 to 10 increasing by 1. A 1 dimensional matrix is
+% often refered to as an "array" or "vector", but its no different from
+% other matrices. You'll also notice that:
+my_second_array = [1:10] % is the same thing (we don't have to specify the incriment if it is 1...
+my_third_array = [1:2:10] % ...but we do for other increments...the colon operator also allows you 
+                          % to create an equally spaced vector of values using the more general form 
+                          % "start:step:end"
+my_fourth_array = [1 4 5 2 8 47 1206] % any numbers within brackets creates a matrix
+my_fifth_array = [1; 4; 5; 8; 47; 1206] % notice that this matrix is the same but rotated... more on that later
+
+% Some basic functions to perform on arrays:
 min(my_first_array)
 max(my_first_array)
 sum(my_first_array)
 length(my_first_array)
 mean(my_first_array)
-std(my_first_array) % standard deviation
+std(my_first_array) % standard deviation - MATLAB has a lot of statistics functions built in, but aficionados use the "statistics toolbox" (more $)
 
-% is a 1x10 matrix from 1 to 10 increasing by 1. A 1 dimensional matrix is
-% often refered to as an "array" or "vector", but its no different from
-% other matrices. You'll also notice that:
-
-my_second_array = [1:10] % is the same thing (we don't have to specify the incriment if it is 1...
-my_third_array = [1:2:10] % ...but we do for other increments...)
-my_fourth_array = [1 4 5 2 8 47 1206] % any numbers within brackets creates a matrix
-my_fifth_array = [1; 4; 5; 8; 47; 1206] % notice that this matrix is the same but rotated... more on that later
-
-% Unlike most other programming languages, MATLAB DOES NOT (!!) use a zero
+% Unlike most other programming languages, MATLAB DOES NOT (BEWARE!!!) use a zero
 % index; that is, if you want the first element in an array, you use 1:
 my_first_array(1) % the first element
 my_first_array(10) % the last element
 my_first_array(end) % also the last element (neato!)
 my_first_array(end-1) % the second to last element
 
-% More useful ways to make a an array
+% More useful ways to make a an array:
 l = linspace(0, 2*pi, 10000); % 10000 element array from 0 to 2*pi (inclusive); how easy is it to plot a sine wave using these linearly spaced values? -> plot(l,sin(l))
-z = zeros(50); % an array of 50 zeros
+z = zeros(50); % an array of 50 zeros, this function is often used for "preallocation" discussed later
 o = ones(50); % an array of 50 ones
 p = pi*ones(50); % an array of 50 pi's
 
 
 % ---- !!! A BRIEF FORAY INTO IMAGE PROCESSING !!! ------------------------------------------
-
-% MATLAB is as phenomenal at image processing as it is boring to learn
+% MATLAB is as phenomenal for image processing as it is boring for learning
 % about matrix manipulation. So before we go any further, lets play with a
 % fun matrix: an image.
 
 BW = imread('kristan_bw.pgm'); % reads in an image
-imshow(BW); % shows our image... er, BW mean, matrix
+imshow(BW); % shows our image... er, I mean, matrix
 
 % So you just made a 2-dimensional array (or "matrix") but instead of
 % making some random 2D matrix, this image will let us visualize
@@ -193,15 +197,14 @@ length(BW) % length returns the longest dimension (same as max(size))
 numel(BW) % the number of elements in BW
 
 % If we want to index into this matrix, we treat it the same way we would
-% an array, just with 2 dimensions.
-
-BW(1,1) % returns the value in the first the first row and first column (the upper left corner)
+% an array, just with 2 dimensions:
+firstPixel = BW(1,1) % returns the value in the first the first row and first column (the upper left corner)
 
 % If you only include a single index value for a multidimensional array, then MATLAB uses "linear
 % indexing". For more information, search help for 'ind2sub'
-BW(floor(numel(BW)/2))
+midPixel = BW(floor(numel(BW)/2))  %returns the value of the ~middle pixel
 
-% We can assign values in the same manner
+% We can assign values in the same manner:
 new_BW = BW; % copy BW for the sake of this experiment
 new_BW(1,1) = 0; % reassign row 1 column 1 with the value 0
 imshow(new_BW); % zoom into the upper left hand corner to see the effect
@@ -231,8 +234,8 @@ close all; % close image
 imshow(BW); % bill upright
 imshow(BW'); % bill laying down
 
-% This may see obvious, but the same is true for 1 dimensional matrices/arrays.
-% You'll notice this is the same effect as when we formed an array using
+% This may see obvious, but the above is true for 1-dimensional matrices/arrays.
+% You'll notice that the code below has the same effect as when we formed an array using
 % spaces and semicolons, which you may remember from my_fourth_array and
 % my_fifth_array above...
 my_first_array % as we created it
@@ -250,16 +253,16 @@ imshow(bill_on_top_of_bill); % Bill, get down from there!
 bill_laying_next_to_bill = [BW' BW];% concatenates a transposed matrix along rows
 imshow(bill_laying_next_to_bill); % does Kathy know?!
 
-% Let's enter a dimension further...
+% Let's go a dimension further...
 RGB = imread('kristan_rgb.ppm'); % RGB image of Bill
 imshow(RGB); % never looked better
 
-% RGB images are comprise of Red, Green, and Blue components...
+% RGB images are comprise of Red, Green, and Blue components
 size(RGB)
 
-% you'll notice that the first 2 dimensions of this matrix are the same as
+% You'll notice that the first 2 dimensions of this matrix are the same as
 % our BW image of Bill; in RGB there are of 3 of these matrices, each one
-% making up the Red, Green, and Blue components of Bill:
+% specifying the amount of Red, Green, and Blue in each pixel of Bill:
 close all; % close all images
 red = RGB(:,:,1); % the red component...
 green = RGB(:,:,2); % the green...
@@ -269,78 +272,43 @@ imshow(RGB_next_to_each_other); % Bill, you look pale!
 
 % Most MATLAB functions will treat matrices in an element-by-element
 % nature, but for certain basic operands (*,/,^,etc...) you need to specify
-% you want to act on each element specifically. This is a common source of errors:
+% you want to act on each element specifically. This is a common source of RED ERRORS and NASTY SOUNDS:
 close all; % close all images
 imshow(red.^2); % the square of each element of red (try red^2 in the command line...)
 imshow(red.*blue); % multiplies each element in red by the element in the same position in blue (NOT the same as red*blue)
+close all;
 
-% ------------------- %
-% JAK - I think this whole next section should go into the For Loops section
+%% STRINGS
+% Strings are just arrays of characters!
+% You can concatenate strings to each other:
+str1 = 'How ';
+str2 = 'are you?';
+longer_str = [str1 str2] % How are you?
 
-% PS: often you will make for loops to construct data. For instance, you
-% might be tempted to do something like this:
+% You can easily convert numbers to a str:
+num_str = num2str(2+2) % the string "4"
 
-% find the squares of each element in cat
-
-cat = [1 59 47 122 909];
-dog = [];
-for i = 1:numel(cat);
-    dog = [dog cat(i)^2]; % add the new value to the existing matrix dog
-end
-
-% MATLAB will often scold you, saying something like "this matrix changes
-% size" or "it is faster to preallocate". If you already know the size of
-% the matrix you are forming, it is always faster to "preallocate" by making
-% your matrix beforehand:
-
-% find the squares of each element in cat
-
-cat = [1 59 47 122 909];
-dog = zeros(size(cat)); % a matrix of zeros that is the same size as cat
-for i = 1:numel(cat);
-    dog(i) = cat(i)^2;
-end
-
-% you could really use anything to preallocate so long as it is the same
-% size, such as:
-
-ones(size(cat)) % matrix of 1s that is the same size as cat
-linspace(pi,sqrt(13),numel(cat)) % a matrix with the same number of elements as cat from pi to the sqrt(13)
-rand(size(cat)) % pseudorandom numbers of the same size of cat
-
-% --------------- %
-
-% PPS: since MATLAB is all about matrices, you'll often hear all the
-% coolest MATLABers (oxymoron?) talking about "vectorization" (not to be
-% confused with either 1 dimensional arrays or physics vectors). This is a
-% more advanced subject, suffice it to say that when one "vectorizes their
-% code" they simplify their code by removing unnecessary for loops. For
-% instance the above for loop could be written as:
-
-dog = cat.^2; % look how much faster!
-
-% There's always more than one way to square a cat...
+% This can be very useful for outputting to the screen or figures:
+disp(['2 + 2 = ', num2str(2+2)]) % prints '2 + 2 = 4'
 
 %% BOOLEANS or LOGICALS
-
-% Booleans or Logicals as Matlab calls them are values that are either True
+% Booleans or Logicals as MATLAB calls them are values that are either True
 % or False. They are typically used in conditional tests which we will get
-% to very soon or logical indexing which is also covered later. Matlab
+% to very soon or logical indexing which is also covered later. MATLAB
 % represents true and false by a 1 and 0 respectively, although if you
 % apply a boolean operator to a double, any non-zero number (except NaN) is
 % considered true.
-
 
 % Boolean operations:
 t = true;
 f = not(t) % False (not switches True to False and False to True)
 f = ~t % False (~ is shorthand for not())
-t && t % True (and is True only if both are True)
-t && f % False (this and is False if either is False)
-f && f % False
-t || t % True (or is True if either is True)
-t || f % True
-f || f % False
+result = t && t % True (and is True only if both are True)
+result = t && f % False (this and is False if either is False)
+result = f && f % False
+result = t || t % True (or is True if either is True)
+result = t || f % True
+result = f || f % False
 
 % You can also make booleans by comparisons:
 x = 5
@@ -370,40 +338,23 @@ b = [t, t, f, t, t, f, f, t]
 a & b
 a | b
 
-% There are many functions that return logical arrays such as the set
-% operation ismember:
+% There are many functions that return logical arrays such as the set operation 'ismember':
 fib = [0 1 1 2 3 5 8 13 21 34 55 89 144];
 ismember(1:50, fib) % which of the first 50 numbers are fibbonacci numbers
 ~ismember(1:50, fib) % which aren't
 
-%% STRINGS
-% Strings are just arrays of characters!
-% You can concatenate strings to each other:
-str1 = 'How ';
-str2 = 'are you?';
-longer_str = [str1 str2] % How are you?
-
-% You can easily convert numbers to a str:
-num_str = num2str(2+2) % the string "4"
-
-% You can even concatenate numbers to a string by first converting:
-disp(['2 + 2 = ', num2str(2+2)]) % prints '2 + 2 = 4'
-
 %% FINDING and LOGICAL INDEXING
-
-% One of Matlab's strengths is it has a great gui and debugger (more on the
-% debugger later). Anytime you are programming you can look at the
-% Workspace (often on the top right column in matlab), which list all the
-% variables you've created. If you have created a large variable whose
+% One of MATLAB's strengths is it has a great GUI and debugger (which you should
+% be using now if you are stepping through this code). Anytime you are programming you 
+% can look at the Workspace (often on the top right column in MATLAB), which list all 
+% of the variables that you've created. If you have created a large variable whose
 % value doesn't display in the workspace window you can double click on the
 % variable name to open the Variable Editor to look at the variable in its
-% entirety.
+% entirety, or even edit it directly there.
 
-large_mat = round(magic(10) .* rand(10)); % supressed so it doesn't fill up our command window
+large_mat = round(magic(10) .* rand(10)); % suppressed so it doesn't fill up our command window
 
-% Now find large_mat in the Workspace window and view it in the Variable
-% Editor.
-
+% Now find large_mat in the Workspace window and view it in the Variable Editor
 large_mat(3,5)
 
 % Notice how this is the value in the 3rd row and 5th column. You can also
@@ -423,42 +374,35 @@ large_bool = large_mat > 60 & mod(large_mat, 2) == 0;
 % to find the sum/min/max for each column. To work around this you can use
 % (:) or reshape(X, numel(X), 1). RESHAPE(X,M,N) returns the M-by-N matrix
 % that contains the elements of X taken columnwise.
-
 sum(large_bool(:))
 sum(reshape(large_bool, numel(large_bool), 1))
 
 % If you would like the indices of the positions instead of a boolean
-% matrix you can use find
+% matrix you can use the 'find' function:
 large_indx = find(large_bool);
 
 % If you would like to get the actual values instead of a boolean matrix or
 % the indices you can use the boolean matrix to directly index large_mat,
-% or you can use the indices
-
+% or you can use the indices:
 large_mat(large_bool)
 large_mat(large_indx)
 
 % Astute programmers will notice that to count the number of elements that
-% match your criteria one could also use
-
+% match your criteria one could also use:
 numel(large_mat(large_bool))
 
 % So if you were actually only looking for the smallest even element larger
-% than 80 you could use
-
+% than 80 you could use:
 min(large_mat(large_bool))
 
 % Also note that for simplicity we have separately defined large_bool but
 % for any of these commands you could explicitly include the definition of
-% large_bool instead.
-
+% large_bool instead:
 min(large_mat(large_mat > 60 & mod(large_mat, 2) == 0))
 
-% What is the largest number in your matrix that is less than 70 and
-% divisible by both 3 and 5?
+% What is the largest number in your matrix that is less than 70 and divisible by both 3 and 5?
 
-% In neuro, you can use these techniques to quickly find spike times
-% (assuming low noise):
+% In neuroscience, you can use these techniques to quickly find spike times(assuming low noise):
 % time = some array ...
 % voltage = some array ...
 % spikes = time(find(voltage(1:end-1) < 0 & voltage(2:end) > 0) + 1)
@@ -469,7 +413,7 @@ min(large_mat(large_mat > 60 & mod(large_mat, 2) == 0))
 % adjacent positions.
 
 %% IF STATEMENTS
-% So now we get into the interesting stuff. If statements let you run a chunk
+% So now we get into the interesting topic of program control. 'If statements' let you run a chunk
 % of run code if and only if something is True. Let's see an example:
 x=5;
 if x > 0
@@ -495,12 +439,17 @@ else % at this point x cannot be positive or negative
   disp('x is zero')
 end
 
-% also switch statements, etc
-% maybe include a note about indentation in other languages such as Python
+% More complicated control can be built with 'switch statments:
+help switch
+
+% NOTE ABOUT PYTHON:
+% Python is somewhat strange in that indentation controls the nesting in 'if statements'
+% and other control, but MATLAB does not require any specific spacing or indentation, it 
+% is only aesthetic
 
 %% WHILE LOOPS
-% So now that we have conditional statements down, lets add on loops. The
-% simplest loop is a while loop. An example is:
+% So now that we have conditional statements down, lets tackle loops. The
+% simplest loop is a 'while loop'. An example is:
 
 a = 0;
 b = 1;
@@ -509,16 +458,31 @@ while b < 20
     a = b;
     b = a + b;
 end
-
-% Put that loop into a script and run it. Do you recongnize the pattern of
-% numbers? The while loop will repeatedly run the code inside it until it's
+pause  % require user input in Command Window to continue
+% Put a breakpoint on the end statement and runthe whole loop at once. Do you recongnize the 
+% pattern of numbers? The while loop will repeatedly run the code inside it until it's
 % conditional statement is False. So you can compute more of this series by
-% change "b < 20" to "b < 2000".
+% changing "b < 20" to "b < 2000".
 
-%% FOR LOOPS
-% The truth is that you probably won't use while loops too much because their
-% big brother the "for loop" is much more convient.
+% You can also conditionally break out of any loop, depending on a calculation, using a 'break':
+a = 0;
+b = 1;
+while b < 20
+    disp(b)
+    a = b;
+    b = a + b;
+    if b == 8
+        break % anything but 8 - let's quit this BS now
+    end
+end
+pause 
 
+% Finally, in case you get yourself into an infinite loop, 
+% note that you can stop most MATLAB operations using <Ctrl-C>
+
+%% FOR LOOPS, PREALLOCATION, and VECTORIZATION
+% The truth is that you probably won't use the "while loop" too much, because its
+% brother the "for loop" is much more convenient.
 a = {'cat', 'window', 'defenestrate'};
 for x = a % For loops can take any 'iterable' object
   disp(x)
@@ -528,25 +492,68 @@ for letter = 'cat'
   disp(letter)
 end
 
-% If you need to cover a range of values, then you use the conviently named
-% 'range' function:
+% More commonly, we will be using the array techniques we learned above with our loops:
+for x = 0:2:10
+    disp(['cat ' num2str(x)])
+end
 
-% for i = range(length(a)): % Goes from i = 0 to len(a)-1 (so 0, 1, 2 in this case)
-% print i, a[i]
-% end
+% Often you will make for loops to construct data. For instance, you
+% might be tempted to do something like this:
 
-% A range creates a list of numbers based on what you give it. Range doesn't
-% just go from 0 up by 1 at a time, it can create fancy lists as well:
+% find the squares of each element in cat
+cat = [1 59 47 122 909];
+dog = [];  % declare an empty matrix
+for i = 1:numel(cat);
+    dog = [dog cat(i)^2]; % add the new value to the existing matrix dog
+end
 
-0:5 % [0, 1, 2, 3, 4]
-5:10 % [5, 6, 7, 8, 9]
-0:3:10 % [0, 3, 6, 9]
--10:-30:-100% [-10, -40, -70]
+% MATLAB will often scold you with orange warnings, saying something like "this matrix changes
+% size" or "it is faster to preallocate". If you already know the size of
+% the matrix you are forming, it is always faster to "preallocate" by making
+% your matrix beforehand:
+cat = [1 59 47 122 909];
+dog = zeros(size(cat)); % a matrix of zeros that is the same size as cat
+for i = 1:numel(cat);
+    dog(i) = cat(i)^2;
+end
 
-% Basically, range(start, end, increment) with start and increment as optional
+% You could really use anything to preallocate so long as it is the same size, such as:
+ones(size(cat)) % matrix of 1s that is the same size as cat
+linspace(pi,sqrt(13),numel(cat)) % a matrix with the same number of elements as cat from pi to the sqrt(13)
+rand(size(cat)) % pseudorandom numbers of the same size of cat
+
+% Since MATLAB is all about matrices, you'll often hear all the
+% coolest MATLABers (oxymoron?) talking about "vectorization" (not to be
+% confused with either 1 dimensional arrays or physics vectors). This is a
+% more advanced subject, but suffice it to say that when one "vectorizes their
+% code" they simplify their code by removing unnecessary for loops. For
+% instance the above for loop could be written as:
+dog = cat.^2; % look how much faster!
+
+% Actually, we can measure how much faster on a particular processor using 'tic' and 'toc':
+tic
+cat = [1 59 47 122 909];
+dog = [];  % declare an empty matrix
+for i = 1:numel(cat);
+    dog = [dog cat(i)^2]; % add the new value to the existing matrix dog
+end
+notPreallocatedNotVectorized = toc
+
+tic
+cat = [1 59 47 122 909];
+dog = zeros(size(cat)); % a matrix of zeros that is the same size as cat
+for i = 1:numel(cat);
+    dog(i) = cat(i)^2;
+end
+preallocatedButNotVectorized = toc
+
+tic
+dog = cat.^2; 
+vectorizedShazam = toc
+pause
+% There's always more than one way to square a cat...
 
 %% FUNCTIONS
-
 % Up until now our little matlab tutorial has been a "script"; it starts at
 % the top and runs line-by-line down to the bottom where it stops and every
 % variable is visible in the workspace. This is all well and good, but
@@ -562,7 +569,6 @@ end
 
 % Lets say you're trying to find the (euclidean) distance between 2 points.
 % You could write:
-
 point_1 = rand(1,2); % 2 random x,y coordinates
 point_2 = rand(1,2); % 2 random x,y coordinates
 
@@ -575,9 +581,10 @@ distance = sqrt((point_1(1) - point_2(1))^2 + (point_1(2) - point_2(2))^2); % th
 % between points in 3,3,5...N dimensions! Think of the time you'll save!
 
 % This is where things get awkward: unlike other programming languages, you
-% cannot write a function within another script or function in matlab.
-% Instead, every function is saved as a .m file. Ours is called
-% euclidean_distance.m Open it up, and keep following along.
+% cannot write a function within another script or function in MATLAB.
+% Instead, every function is saved as a .m file, with the filename being the same
+% as the function call. Ours is called "euclidean_distance.m" Open it up, and keep 
+% following along.
 
 % The first line of all functions look like this (without the comment):
 
@@ -593,7 +600,6 @@ distance = sqrt((point_1(1) - point_2(1))^2 + (point_1(2) - point_2(2))^2); % th
 % in one of your other scripts or functions, you can use whatever you want
 % so long as it follows the same pattern. For instance, in our distance
 % function:
-
 lou_ferrigno = rand(5,1); % a random 5 dimensional point
 a_french_baguette = rand(5,1); % and another random 5 dimensional point
 
@@ -606,7 +612,7 @@ sasquatch_felony = euclidean_distance(lou_ferrigno,a_french_baguette);
 % function. Whatever the value of your defined output variable is at the
 % end of the function will be returned.
 
-% You'll notice that when you write a script all of the variables will show
+% You'll notice that when you write a script, all of the variables will show
 % up in the "workspace". When you call a function, you don't see any of the
 % variable values within the function, only those that you specify as
 % output. This has to do with a variable being "local". As matlab progesses
@@ -616,7 +622,7 @@ sasquatch_felony = euclidean_distance(lou_ferrigno,a_french_baguette);
 
 % Try putting a debugging stop in any line of the euclidean_distance.m file
 % (click the little dash next to the line of code once). Now run the next
-% line and keep an eye on your variable workspace:
+% line (using F11 to 'step into' the function) and keep an eye on your variable workspace:
 
 sasquatch_felony = euclidean_distance(lou_ferrigno,a_french_baguette);
 
@@ -643,25 +649,22 @@ help euclidean_distance
 % you'll save yourself hours of reading or rewriting code to figure out
 % what super_func.m does a few months from now...
 
-% Congrats! Now you can add to an already stellar set of functions.
+% Congrats! Now you can add to an already stellar set of functions:
+% As an exercise, try writing a function that computes the
+% Fibonacci series up to a given value. It should store every value in a list
+% and return that list.
+
+% To make sure it works, print out that list by doing something like:
+% fib(20) % should print [1, 1, 2, 3, 5, 8, 13]
+% fib(2000) % should print [1, 1, 2, 3, 5, 8, 13, ... 610, 987, 1597]
+
+% Tip: the example for while loops printed the Fibonacci series, so you have
+% the algorithm.
 
 %% FILE I/O
-% % SciPy arrays and matrices can easily be read from and saved to files.
-%
-% % Save array / matrix:
-% sp.save('test.npy', m2) % binary format (smallest)
-% sp.savetxt('test.txt', m2) % text format (easiest to read as text)
-% sp.savetxt('test.csv', m2, delimiter=',') % csv format (easily usable by Excel)
-%
-% % Load array / matrix
-% m3 = sp.load('test.npy')
-% m3 = sp.genfromtxt('test.txt')
-% m3 = sp.genfromtxt('test.csv', delimiter=',')
-%
-% % There is also a npz format that you get with savez that can store multiple
-% % arrays / matrices and is compressed.
+% TO DO: example with .mat files and maybe spreadsheets
 
-%%%%%%%%%%%%%%%%%%%% PLOTTING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PLOTTING
 % One of MATLAB's greatest attributes is its powerful plotting cababilities. Let's take a look:
 
 % first lets generates some data:
@@ -701,19 +704,16 @@ hold on; % hold all the data on the current axis
 plot(x,y_cos,'r'); % plot cos data in red (more on this later)
 
 % so long as hold is left "on" more data can be added...
-
 y_line = linspace(-1,1,numel(x)); % just a line
 plot(x,y_line,'g'); % plot tan data in green
 
 % ...but once we turn hold "off" on the current axis, all previous plots
 % are lost
-
 y_mod = mod(x,2)-1; % modulo 2 of all values of x (normalized)
 hold off; % turn off "hold" on the current axis
 plot(x,y_mod,'k'); % plot mod data in black. bye-bye previous data!
 
-%% SUBPLOT
-
+% SUBPLOTTING: ----------------------------------------------------------------
 % You'll notice that like having multiple figures, having multiple lines on the
 % same plot begins to get cluttered. Luckily you can put multiple axes on
 % the same figure with subplot(m,n,p). Subplot(m,n,p) creates m rows and n
@@ -730,8 +730,7 @@ plot(x,y_line,'g');
 subplot(2,2,4);
 plot(x,y_mod,'k');
 
-%% PIZZAZZ!!
-
+% PIZZAZZ!!---------------------------------------------------------------------
 % In previous plots we used a string as a third argument to plot() to
 % create plots of different colors. We can use these strings to define
 % color, marker, and line type:
@@ -774,11 +773,11 @@ grid on; % what the hell! slap a grid on there! you only live once!
 legend('sine','cosine'); % a legend describing each data set
 title('THIS PLOT ROCKS!!!','FontSize',20,'Color','y'); % plot title
 
-% this is a very small subset of tools one can use to modify plots; if you
+% This is a very small subset of tools one can use to modify plots; if you
 % can imagine it, there is probably a way to do it...
 
-%% SET, GET, & HANDLES
-
+%% ADVANCED PLOTTING
+% SET, GET, & HANDLES ----------------------------------------------------------
 % MATLAB identifies figures and axes using "handles" which the programmer
 % can use to selectively target specific figures or parts of figures using
 % the set() function
@@ -793,7 +792,7 @@ set(p_handle,'color','r'); % change line color to red
 % automatically stores the current handles: gca ("get current axis") and
 % gcf ("get current figure").
 
-% a good way to understand how gca works is through subplotting:
+% A good way to understand how gca works is through subplotting:
 
 close all; % close all open figures
 figure; % new figure
@@ -814,27 +813,26 @@ hold on;
 plot(x,y_mod,'k'); % plot mod data
 title('this is the NEW gca!'); % make a title showing which is the current axis
 
-% even if you have not specified a handle, you can use 'gca' to target the
+% Even if you have not specified a handle, you can use 'gca' to target the
 % most recently modified axis.
 
-% using handles in conjunction with the functions set() and get() we can
+% Using handles in conjunction with the functions set() and get() we can
 % modify parts of plots. For instance, say we want to make the axes of a
 % plot have the same limits:
-
 close all;
 figure;
 plot(x,y_sin);
 x_lim = get(gca,'xlim'); % get the limits of the x axis
 set(gca,'ylim',x_lim); % set the y limits to be the same as the x limits
 
-%% FIGURE EDITOR
-% ??? need to add this ???
+% There are tons of attributes to set in plots.  For examples, search MATLAB help for "line properties"
 
-%% GRADUATING FROM PLOT(): OTHER PLOTTING FUNCTIONS
+% FIGURE EDITOR ---------------------------------------------------------------------------
+% TO DO: example with modifying a plot and then creating code from your GUI input
 
+% GRADUATING FROM PLOT(): OTHER PLOTTING FUNCTIONS -----------------------------------------
 % MATLAB comes with several plotting functions designed for specific uses.
 % Here are a few favorites:
-
 close all;
 figure;
 subplot(3,1,1);
@@ -846,26 +844,22 @@ scatter(x,y_sin); % and a scatter plot of the same
 
 % MATLAB is also great for plotting 3 dimensional data, such as
 % scatter3()...
-
 close all;
 figure;
 scatter3(x,y_sin,y_cos); % 3D scatter plot. Use the rotate tool to move the plot!
 
 % ...and surf(), which can matrices as surfaces:
-
 P = peaks(40); % make some funky surface data
 close all;
 figure;
 surf(P);
 
 % By assigning the viewing angle with view(), one can use surf to make
-% heatplots
-
+% heatplots:
 view(90,90); % view plot directly from above
 axis tight; % fit axis to surface (remove white space)
 
 %% LIGHTS, CAMERA, ANIMATION!!
-
 % What's more badass than a killer MATLAB figure? One that moves...
 % overkill? perhaps... but MATLAB makes it easy, so let's take a look!
 
@@ -879,10 +873,9 @@ for i = 1:360;
     F(i) = getframe(gcf); % grab the current figure and save it as a movie frame
 end
 
-movie(gcf,F); % play your movie!
+movie(gcf,F); % play your movie! (abort a movie by typing <Ctrl-C>)
 
 % how bout a corkscrew for good measure?
-
 close all;
 figure; % make a new figure
 scatter3(y_sin,y_cos,x); % plot surface
@@ -895,18 +888,6 @@ for i = 1:360;
 end
 
 movie(gcf,F); % play your movie!
-
-%% EXERCISES
-% To see that you understand the basics, write a function that computes the
-% Fibonacci series up to a given value. It should store every value in a list
-% and return that list.
-
-% To make sure it works, print out that list by doing something like:
-%print fib(20) % should print [1, 1, 2, 3, 5, 8, 13]
-%print fib(2000) % should print [1, 1, 2, 3, 5, 8, 13, ... 610, 987, 1597]
-
-% Tip: the example for while loops printed the Fibonacci series, so you have
-% the algorithm.
 
 %% CHALLENGE
 
@@ -979,12 +960,11 @@ which + %which function '+' are you using? (can be used with any function)
 clc % clear command window
 why(1000) % a primitive Siri
 %eval % useful for automated data input
-%pack % memory defrag. might help if �out of memory� errors are getting you down
+%pack % memory defrag. might help if ?out of memory? errors are getting you down
 %squeeze % get rid of empty dimensions
 %sparse % converts a full matrix to sparse form
 % data input functions?
 % dbstop if error
-% break
 
 %From KyleF
 % bsxfun
@@ -995,8 +975,17 @@ why(1000) % a primitive Siri
 % mod
 
 %% USEFUL KEYBOARD SHORTCUTS
-% <shift + '['> for decrease indent
+% < shift + '[' > for decrease indent
+% < Ctrl + 'R' > for comment line or selection
+% < Ctrl + 'T' > for uncomment line or selection
 
+%% FUTURE TOPICS
+% (1)Object Oriented Programming:
+% http://www.mathworks.com/help/matlab/object-oriented-programming.html?s_tid=doc_12b
+% TO DO: put a short example of MATLAB class definition file here, much like function example
 
+% (2) MEX files - interfacing with C
+
+% (3) Cells and Structs and indexing with them
 
 % end of tutorial
