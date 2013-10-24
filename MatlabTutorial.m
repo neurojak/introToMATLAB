@@ -609,40 +609,106 @@ end
 
 % Basically, range(start, end, increment) with start and increment as optional
 
-%% FUNCTIONS
-% If you find yourself writing the same lines of code over and over, or if you
-% just need to organize your code (always a good thing), you can create
-% functions. Functions are mini-programs that take a set of inputs and
-% give a set of outputs. Here is a basic example:
+%%%% FUNCTIONS %%%
 
-% def minimum(a, b): % takes two inputs, 'a' and 'b'
-% if (a < b)
-% return a % the return function gives the outputs, in this case just 1
-% else
-% return b
-% end
+% Up until now our little matlab tutorial has been a "script"; it starts at
+% the top and runs line-by-line down to the bottom where it stops and every
+% variable is visible in the workspace. This is all well and good, but
+% maybe you're writing a bigger script that then goes to ANOTHER script
+% which feeds into ANOTHER. You could copy and paste them all together, but
+% Before long you've got 3000 lines of code and are naming variables things
+% like zebra_cincinatti_pharmacy because you've run out of usable variable 
+% names.
 
-% The above function finds the minimum of two values. You can use it like so:
-% min_value = minimum(5, 10) % min_value is now 5
+% Functions make code neater, more compact, and easier to debug. A function
+% is basically a script in a suit in tie; you pick a script up off its 
+% feet, give it a name, tell it what it gets and what to give in return.
 
-% Since the return function immediately stops the function, the above function
-% could be simplified to:
+% Lets say you're trying to find the (euclidean) distance between 2 points.
+% You could write:
 
-% def minimum(a, b):
-% if (a < b):
-% return a
-% return b
+point_1 = rand(1,2);  % 2 random x,y coordinates
+point_2 = rand(1,2);  % 2 random x,y coordinates
 
-% You can also return more than one value. The function below returns both
-% the minumum and maximum value.
-% def min_max(a, b):
-% if (a < b):
-% return a, b
-% return b, a
-%
-% min_value, max_value = min_max(10, 5)
-%
-% help syntax
+distance = sqrt((point_1(1) - point_2(1))^2 + (point_1(2) - point_2(2))^2); % the distance formula
+
+% Now maybe this is only 1 line of code and writing it makes you consider
+% what a cute couple Euclid and Pythagoras would have made, but this can 
+% get annoying after a while (not the hypothetical mathematician-toga-love
+% part, the writing part). Plus, maybe you want to calculate the distance
+% between points in 3,3,5...N dimensions! Think of the time you'll save!
+
+% This is where things get awkward: unlike other programming languages, you
+% cannot write a function within another script or function in matlab.
+% Instead, every function is saved as a .m file. Ours is called
+% euclidean_distance.m Open it up, and keep following along.
+
+% The first line of all functions look like this (without the comment):
+
+% [output] = function_name(input)
+
+% the function's last line is an "end". Functions can have multiple inputs
+% and outputs
+
+% [output_1, output_2] = function_name(input_1, input_2, input_3)
+
+% When you write a function, the input variable names in the first line
+% MUST match those in the script below it, but when you "call" the function
+% in one of your other scripts or functions, you can use whatever you want
+% so long as it follows the same pattern. For instance, in our distance
+% function:
+
+lou_ferrigno = rand(5,1); % a random 5 dimensional point
+a_french_baguette = rand(5,1); % and another random 5 dimensional point
+
+sasquatch_felony = euclidean_distance(lou_ferrigno,a_french_baguette);
+
+% And as any schoolchild would tell you, sasquatch_felony is the
+% euclidean distance between lou_ferrigno and a_french_baguette. Its basic
+% math.
+
+% The variable you output does not have to be the last variable in your
+% function. Whatever the value of your defined output variable is at the
+% end of the function will be returned.
+
+% You'll notice that when you write a script all of the variables will show
+% up in the "workspace". When you call a function, you don't see any of the
+% variable values within the function, only those that you specify as
+% output. This has to do with a variable being "local". As matlab progesses
+% through your script, all the variables shown in the workspace are
+% accessible. However, only those variables passed to or calculated within
+% a function are accessible inside that function.
+
+% Try putting a debugging stop in any line of the euclidean_distance.m file
+% (click the little dash next to the line of code once). Now run the next
+% line and keep an eye on your variable workspace:
+
+sasquatch_felony = euclidean_distance(lou_ferrigno,a_french_baguette);
+
+% The function runs and stops at your debug point (a K shows up before >> 
+% in the command window to show you are in debug mode) and you can now view
+% the workspace within the function. This is useful to debug problems
+% within the function: you can type anything into the command window using
+% the variables in the workspace to see what your problem might be.
+
+% One last thing on functions: commented lines put directly below the first
+% line of the function are returned when you type "help function_name" in
+% the command window. Like:
+
+help euclidean_distance
+
+% Its good practice to include a discription of your function and who and
+% when it was made with all your functions, lest you forget how or why you
+% made it.
+
+% Every function that comes built-in with matlab (sum, mean, kmeans, max,
+% etc.) has its own .m file. It is customary to give your .m file the same
+% name as your function: weird things can happen if you don't. And trust
+% us, as with variables, give the function a name you can understand:
+% you'll save yourself hours of reading or rewriting code to figure out
+% what super_func.m does a few months from now...
+
+% Congrats! Now you can add to already stellar  set of functions.
 
 %% FILE I/O
 % % SciPy arrays and matrices can easily be read from and saved to files.
