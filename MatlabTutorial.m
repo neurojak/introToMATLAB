@@ -1,16 +1,20 @@
 %% MATLAB tutorial for UCSD Neurosciences
 % MatlabTutorial_Day1_v100
-% Kyle Fischer & Jason Keller, heavily based on previous MATLAB and Python tutorials by Jeff Bush and Doug Rubino
+% Kyle Fischer, Jason Keller, Marvin Thielk
+% heavily based on previous MATLAB and Python tutorials by Jeff Bush and Doug Rubino
 % version 1.00, Fall 2013
-% This scripts is a brief introduction to programming in MATLAB, Day 1 of a 2-day course. Even if
-% you are already familiar with programming, we recommend that you step through this to make sure
-% that everyone is on the same page. The tutorial is meant to be stepped through in Debug mode,
+%
+% This script (a 'script' is just a piece of code that doesn't require any inputs, as opposed to a
+% 'function', which does) is a brief introduction to programming in MATLAB, Day 1 of a 2-day course. 
+% Even if you are already familiar with programming, we recommend that you step through this to make 
+% sure that everyone is on the same page. The tutorial is meant to be stepped through in Debug mode,
 % by placing a break point on the first executable line (in the editor, click on the blank space
-% just to the right of the line # and a red dot should appear). Then press F5 to run, and F10 to
-% advance to the next line of code. It can be helpful to view the command window at the same time
-% as you advance through the code.
+% just to the right of the line # and a red dot should appear). Then press F5 to run until the next 
+% breakpoint, and F10 to execute only the next line of code (or F11 to 'step into' that line if it 
+% contains a function). It can be helpful to view the main (i.e. '>>') command window at the same 
+% time as you advance through the code.
 
-% Other learning resources:
+% Other learning resources from MathWorks:
 % http://www.mathworks.com/academia/student_center/tutorials/launchpad.html
 
 %% COMMENTS and BOOKMARKS
@@ -20,7 +24,8 @@
 % what it is doing and so you will know in a couple months when you go back and
 % look at it (you think you'll remember but you won't).
 
-% A line that starts with '%%' creates a block for 'folding' and organizing
+% A line that starts with '%%' creates a block for 'folding' and organizing (try <Ctrl-Shift-=> 
+% to expand all folded sections
 
 %{
 For a large block comment, use '%{'
@@ -32,8 +37,8 @@ comment, <Ctrl-'t'> to uncomment
 % bookmark on/off (a cyan square should appear). Then just press <F2> to hop between bookmarks.
 
 %% BASICS
-% To output to the command window, you use 'disp' or 'display', where a string is enclosed in
-% single quotes like so:
+% To output characters to the command window, you use 'disp' or 'display', where a string is 
+% enclosed in single quotes like so:
 disp('Cajal = God')
 
 % Next copy and paste to above line straight onto the command line and press <Enter>. You can run
@@ -47,9 +52,9 @@ disp('Cajal = God')
 % to the left of the scroll bar? It would be red if you made a syntax error...)
 2 + 2 % displays 4 (answer is automatically saved into a variable called 'ans')
 disp(2 + 2) % displays 4
-3^3 % displays 27 (3^3)
+3^3 % displays 27
 3^3; % displays nothing b/c of semicolon
-7/2 % displays 3.5000 (the default data type in MATLAB is 64-bit double-precision)
+7/2 % displays 3.5000 (the default data type in MATLAB is 64-bit double-precision - what a memory hog)
 int8(7/2) % displays 4 (because we have forced the output to an 8-bit integer)
 rem(7,2) % displays 1 (the remainder after dividing 7 by 2)
 mod(7,2) % displays 1 (the modulo/remainder after dividing 7 by 2)
@@ -62,12 +67,15 @@ x = 2 + 2 % assigns 4 to the variable x
 y = x * 3 % assigns 12 to the variable y
 y / 2 % disps 6
 
-%Everything in MATLAB is case-sensitive:
+%Everything in MATLAB is case-sensitive; uncomment and run this to create an error:
 % disp(Y)
 
-% Ellipses can be used if you want to keep code neat and confined to a certain width on teh screen:
+% Ellipses can be used if you want to keep code neat and confined to a certain width on the screen:
 x =...
     x^2;
+
+clear x; % delete variable x from your workspace
+clear all; % clear the workspace of all variables to free up memory and organize yourself
 
 % One of MATLAB's greatest strengths as a programming language is its documentation.
 % At any time if you want to know what a function does you can use the help function like so:
@@ -77,124 +85,53 @@ help elfun
 % to other useful functions at the bottom of the help file in the 'See Also' section.
 
 %% ERRORS
-% explain that the whole function stack is shown, with links
-% another big plus of MATLAB
+% It is inevitable that you will run into errors in your code so you need to understand the common 
+% errors, what they mean, and how to work on fixing them. In general, MATLAB does a decent job of 
+% explaining what goes wrong.  When an error occurs, it will show you the file and line it occured 
+% in, and provide a link to that line. 
 
-% % It is invetible that you will run into errors in your code so you need to
-% % understand the common errors, what they mean, and how to work on fixing them.
-%
-% % Probably the most common error is a "SyntaxError". This basically means that
-% % you tried to run a program that doesn't follow the rules of the Python
-% % language. For example, if you type in the shell "x = [5, 6, 7)" you will get
-% % a syntax error (the list must end with ]). Depending on your version of IDLE
-% % it will either sa highlight the error or print an message in the shell like:
-%
-% """
-% File "<pyshell%1>", line 1, in <module>
-% x = [5, 6, 7)
-% ^
-% """
-%
-% % The little ^ indicates where the problem is.
-%
-% % Other errors give a traceback where it tells you all the functions being
-% % called with the second to last being the line that caused the error at the
-% % and the last line being a description of the problem.
-%
-% % For example, create the following function, and then call it like divZero(8)
-%
-% def divZero(x):
-% return x / 0;
-%
-% % You should see an error like:
-% """
-% Traceback (most recent call last):
-% File "<pyshell%2>", line 1, in <module>
-% divZero(6)
-% File "D:\Desktop\complab\week0\PythonTutorial.py", line 383, in divZero
-% return x / 0;
-% ZeroDivisionError: integer division or modulo by zero
-% """
-% % It tells you that you divided by zero, which is not allowed.
-%
-% % Other common errors:
-%
-% """NameError: name 'spam' is not defined"""
-% % You tried to use a variable named "spam" but it does not exists yet.
-%
-% """IndexError: list index out of range"""
-% % You tried to access an element in a list or array that is <0 or >=len(list)
-% % For example
-% %x = [1, 2, 3]
-% %print x[5] % generates error
-% %print x[-1] % generates error
-%
-% """TypeError: cannot concatenate 'str' and 'int' objects"""
-% % You tried to "add" a string and a number like so: "hello" + 5
-% % To do this properly you must do: "hello" + str(5)
-%
-% """TypeError: divZero() takes exactly 1 argument (0 given)"""
-% % You called a function with the wrong number of inputs. This is the error you
-% % would get if you called divZero with no inputs.
-%
-% """ImportError: No module named foo"""
-% % You tried to import the module named foo but it doesn't exist. Either you
-% % typed the name wrong or you haven't properly installed the module.
-%
-% """IOError: [Errno 2] No such file or directory: 'x.txt'"""
-% % All IOErrors deal with problems with files. In this case we tried to open the
-% % file 'x.txt' which doesn't exist.
-%
-% """AttributeError: 'list' object has no attribute 'bar'"""
-% % You tried to access an attribute or function that doesn't exist. The above
-% % example is what you would get if you did:
-% %x = [1, 2, 3]
-% %x.foo()
-% % Since lists have no foo function, this causes an error.
-%
-% """ValueError: list.remove(x): x not in list"""
-% % A ValueError means that a function recieved an unexpected value. The above
-% % example is generated when you do:
-% %x = [1, 2, 3]
-% %x.remove(6)
-% % Since there is no "6" in the list it causes an error.
-%
-% % There are many other errors, but these are the most common ones. Hopefully
-% % you won't see them too often, and never see the less common ones.
-%
-%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%% Advanced %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% % There are tons of other advanced things Python offers. Ask us and we may be
-% % able to help you use them. Here is a brief list of things you may use:
-% % * classes / namespaces
-% % * complex numbers
-% % * lambda fucntions
-% % * sets, queues, and stacks
-% % * list comprehensions
-%
-%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%% SciPy %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% % SciPy provides advanced math and scientific functions for Python. It provides
-% % nearly all of the functionality of Matlab for Python.
-%
-% % The SciPy module (aka library) needs to be imported to use it. The next line
-% % imports the SciPy library.
-% import scipy
-%
-% % From now on you can use all of the SciPy functions by doing scipy.function()
-% % You can get help for these functions by doing help(scipy.function), e.g.
-% help(scipy.sin)
-%
-% % If you use one function a lot then you may want to make an 'alias' for it:
-% from scipy import sin
-% % Now the function 'scipy.sin' can be used just as 'sin'.
-%
-% % You can also import a module and give it a new name, for example:
-% import scipy as sp
-% % Now you can use sp anywhere you would have used scipy.
-% % If you use 'import scipy as sp' there is no need to use 'import scipy'
+% For example, uncomment and run the line below to get the DREADED MACHINE ERROR SOUND and 
+% accompanying RED TEXT:
+% x = [5, 6, 7);
+
+% this should produce a RED TEXT like
+%{
+Error: File: MatlabTutorial.m Line: 96 Column: 13
+Unbalanced or unexpected parenthesis or bracket.
+%}
+
+% Additionally, if the error-causing line is in a file that is a function called by another 
+% function or script, it will show the entire 'breadcrumbs' of function calls that led to the error.  
+% Thus an error that may seem obscure at first because it's not in YOUR code can be easily traced
+% because you can see how the input that you passed to a certain function was invalid.
+
+% For example, let's try to find the least common multiple of 0 and 1 (uncomment next line):
+% y = lcm(0,1);
+% this should produce a RED TEXT like
+%{
+Error using lcm (line 17)
+Input arguments must contain positive integers.
+
+Error in MatlabTutorial (line 106)
+y = lcm(0,1);.
+%}
+
+% Some other common errors:
+% (1) Undefined function or variable 'x'.
+%       - you tried to use a variable/name that you haven't defined yet
+% (2) Index exceeds matrix dimensions.
+%       - e.g. you tried to access the 10th value in a list of 9 numbers 
+% (3) Undefined function 'foo' for input arguments of type 'double'.
+%       - you tried to use a function called 'foo', but MATLAB doesn't know where it is
+%       - Maybe you just spelled 'foo' wrong, but this is part of a larger lesson about the MATLAB 
+%       - 'path', which is basically an ordered list of locations in which to look for functions 
+%       - like 'foo(x)'.  
+%       - To see your MATLAB path, access it from the main file menu or ribbon in MATLAB (depends 
+%       - on version) by clicking on something like [File->Set Path] or just a [Set Path] button.
+%       - OR just type "help path" in the main command line.  Adding locations is self-explanatory.
+
+% There are many other errors that you will run into (hopefully not too often), but just remember
+% to use the breadcrumbs and help menus to figure out what went wrong.
 
 %% ARRAYS, MATRICES, and INDEXING
 % Now that you're fast on your way to being a pro in the MATrix LABratory,
@@ -202,7 +139,7 @@ help elfun
 
 % Most programming languages have ways of handling groups of data/values as one
 % variable, often refered to as "arrays", "lists", or even "vectors" (not
-% to be confused with the physics vector). Everything in MATLAB is based on 
+% to be confused with the physics vector). Everything in MATLAB is based on
 % arrays, and if there are multiple dimensions we can call them "matrices". Let's start simple:
 
 my_first_array = [1:1:10] % The colon operator also allows you to create an equally spaced vector of values using the more general form "start:step:end"
@@ -211,7 +148,7 @@ max(my_first_array)
 sum(my_first_array)
 length(my_first_array)
 mean(my_first_array)
-std(my_first_array)     % standard deviation
+std(my_first_array) % standard deviation
 
 % is a 1x10 matrix from 1 to 10 increasing by 1. A 1 dimensional matrix is
 % often refered to as an "array" or "vector", but its no different from
@@ -231,9 +168,9 @@ my_first_array(end-1) % the second to last element
 
 % More useful ways to make a an array
 l = linspace(0, 2*pi, 10000); % 10000 element array from 0 to 2*pi (inclusive); how easy is it to plot a sine wave using these linearly spaced values? -> plot(l,sin(l))
-z = zeros(50);      % an array of 50 zeros
-o = ones(50);       % an array of 50 ones
-p = pi*ones(50);    % an array of 50 pi's
+z = zeros(50); % an array of 50 zeros
+o = ones(50); % an array of 50 ones
+p = pi*ones(50); % an array of 50 pi's
 
 
 % ---- !!! A BRIEF FORAY INTO IMAGE PROCESSING !!! ------------------------------------------
@@ -247,8 +184,8 @@ imshow(BW); % shows our image... er, BW mean, matrix
 
 % So you just made a 2-dimensional array (or "matrix") but instead of
 % making some random 2D matrix, this image will let us visualize
-% exactly what we're doing instead of looking at a bunch of numbers. 
-% Each element of this matrix is 1 pixel, with a value from 0 (black) to 255 (white). 
+% exactly what we're doing instead of looking at a bunch of numbers.
+% Each element of this matrix is 1 pixel, with a value from 0 (black) to 255 (white).
 % Let's see how big our matrix is:
 
 size(BW) % the (surprise!) size of the matrix as (row x column)
@@ -260,8 +197,8 @@ numel(BW) % the number of elements in BW
 
 BW(1,1) % returns the value in the first the first row and first column (the upper left corner)
 
-% If you only include a single index value for a multidimensional array, then MATLAB uses "linear 
-% indexing".  For more information, search help for 'ind2sub'
+% If you only include a single index value for a multidimensional array, then MATLAB uses "linear
+% indexing". For more information, search help for 'ind2sub'
 BW(floor(numel(BW)/2))
 
 % We can assign values in the same manner
@@ -309,37 +246,36 @@ bill_next_to_bill = [BW BW]; % concatenates matrices along rows
 imshow(bill_next_to_bill); % twinsies!
 
 bill_on_top_of_bill = [BW; BW]; % concatenates matrices along columns
-imshow(bill_on_top_of_bill); % bill get down from there!
+imshow(bill_on_top_of_bill); % Bill, get down from there!
 bill_laying_next_to_bill = [BW' BW];% concatenates a transposed matrix along rows
-imshow(bill_laying_next_to_bill); % does kathy know?!
+imshow(bill_laying_next_to_bill); % does Kathy know?!
 
 % Let's enter a dimension further...
-RGB = imread('kristan_rgb.ppm'); % RGB image of bill
+RGB = imread('kristan_rgb.ppm'); % RGB image of Bill
 imshow(RGB); % never looked better
 
 % RGB images are comprise of Red, Green, and Blue components...
 size(RGB)
 
 % you'll notice that the first 2 dimensions of this matrix are the same as
-% our BW image of bill; in RGB there are of 3 of these matrices, each one
+% our BW image of Bill; in RGB there are of 3 of these matrices, each one
 % making up the Red, Green, and Blue components of Bill:
 close all; % close all images
 red = RGB(:,:,1); % the red component...
 green = RGB(:,:,2); % the green...
 blue = RGB(:,:,3); % and the blue.
 RGB_next_to_each_other = [red green blue]; % for ease of viewing
-imshow(RGB_next_to_each_other); % bill you look pale!
+imshow(RGB_next_to_each_other); % Bill, you look pale!
 
 % Most MATLAB functions will treat matrices in an element-by-element
 % nature, but for certain basic operands (*,/,^,etc...) you need to specify
-% you want to act on each element specifically. This is a common source of
-% errors:
+% you want to act on each element specifically. This is a common source of errors:
 close all; % close all images
 imshow(red.^2); % the square of each element of red (try red^2 in the command line...)
 imshow(red.*blue); % multiplies each element in red by the element in the same position in blue (NOT the same as red*blue)
 
 % ------------------- %
-% JAK - I think this whole section should go into the For Loops section
+% JAK - I think this whole next section should go into the For Loops section
 
 % PS: often you will make for loops to construct data. For instance, you
 % might be tempted to do something like this:
@@ -448,7 +384,7 @@ str2 = 'are you?';
 longer_str = [str1 str2] % How are you?
 
 % You can easily convert numbers to a str:
-num_str = num2str(2+2)  % the string "4"
+num_str = num2str(2+2) % the string "4"
 
 % You can even concatenate numbers to a string by first converting:
 disp(['2 + 2 = ', num2str(2+2)]) % prints '2 + 2 = 4'
@@ -609,7 +545,7 @@ end
 
 % Basically, range(start, end, increment) with start and increment as optional
 
-%%%% FUNCTIONS %%%
+%% FUNCTIONS
 
 % Up until now our little matlab tutorial has been a "script"; it starts at
 % the top and runs line-by-line down to the bottom where it stops and every
@@ -617,23 +553,23 @@ end
 % maybe you're writing a bigger script that then goes to ANOTHER script
 % which feeds into ANOTHER. You could copy and paste them all together, but
 % Before long you've got 3000 lines of code and are naming variables things
-% like zebra_cincinatti_pharmacy because you've run out of usable variable 
+% like zebra_cincinatti_pharmacy because you've run out of usable variable
 % names.
 
 % Functions make code neater, more compact, and easier to debug. A function
-% is basically a script in a suit in tie; you pick a script up off its 
+% is basically a script in a suit in tie; you pick a script up off its
 % feet, give it a name, tell it what it gets and what to give in return.
 
 % Lets say you're trying to find the (euclidean) distance between 2 points.
 % You could write:
 
-point_1 = rand(1,2);  % 2 random x,y coordinates
-point_2 = rand(1,2);  % 2 random x,y coordinates
+point_1 = rand(1,2); % 2 random x,y coordinates
+point_2 = rand(1,2); % 2 random x,y coordinates
 
 distance = sqrt((point_1(1) - point_2(1))^2 + (point_1(2) - point_2(2))^2); % the distance formula
 
 % Now maybe this is only 1 line of code and writing it makes you consider
-% what a cute couple Euclid and Pythagoras would have made, but this can 
+% what a cute couple Euclid and Pythagoras would have made, but this can
 % get annoying after a while (not the hypothetical mathematician-toga-love
 % part, the writing part). Plus, maybe you want to calculate the distance
 % between points in 3,3,5...N dimensions! Think of the time you'll save!
@@ -664,8 +600,7 @@ a_french_baguette = rand(5,1); % and another random 5 dimensional point
 sasquatch_felony = euclidean_distance(lou_ferrigno,a_french_baguette);
 
 % And as any schoolchild would tell you, sasquatch_felony is the
-% euclidean distance between lou_ferrigno and a_french_baguette. Its basic
-% math.
+% euclidean distance between lou_ferrigno and a_french_baguette. It's basic math.
 
 % The variable you output does not have to be the last variable in your
 % function. Whatever the value of your defined output variable is at the
@@ -685,7 +620,7 @@ sasquatch_felony = euclidean_distance(lou_ferrigno,a_french_baguette);
 
 sasquatch_felony = euclidean_distance(lou_ferrigno,a_french_baguette);
 
-% The function runs and stops at your debug point (a K shows up before >> 
+% The function runs and stops at your debug point (a K shows up before >>
 % in the command window to show you are in debug mode) and you can now view
 % the workspace within the function. This is useful to debug problems
 % within the function: you can type anything into the command window using
@@ -708,7 +643,7 @@ help euclidean_distance
 % you'll save yourself hours of reading or rewriting code to figure out
 % what super_func.m does a few months from now...
 
-% Congrats! Now you can add to already stellar  set of functions.
+% Congrats! Now you can add to an already stellar set of functions.
 
 %% FILE I/O
 % % SciPy arrays and matrices can easily be read from and saved to files.
