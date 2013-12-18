@@ -1,1 +1,3 @@
-This a repository for MATLAB tutorial files.
+Welcome to the official-ish UCSD neurograd MATLAB bootcamp/tutorial.  It should take a few hours to read and step through
+all of the code. Just open the Tutorial '.m' file in the MATLAB Editor, put a breakpoint on the first executable
+line, and then run <F5> and step through <F10> while reading all the glorious comments.
