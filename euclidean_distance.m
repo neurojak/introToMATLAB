@@ -20,4 +20,8 @@ end
 % compute the distance
 distance = sqrt( sum( (point_1-point_2).^2 ) );
 
+<<<<<<< HEAD
 end
+=======
+end
+>>>>>>> 789d14e0b8ec5a015fb85052233d2d8ed83884e2
