@@ -965,6 +965,7 @@ why(1000) % a primitive Siri
 %sparse % converts a full matrix to sparse form
 % data input functions?
 % dbstop if error
+% keyboard %for debugging within functions; type 'return' to exit
 
 %From KyleF
 % bsxfun
