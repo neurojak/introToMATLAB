@@ -949,23 +949,25 @@ movie(gcf,F); % play your movie!
 % this is a list of [perhaps more exotic] MATLAB functions/commands with brief explanations compiled by
 % other students:
 
-help elmat
-
 %From JasonK
 help specfun % specialized math functions
 help datafun % data analysis and Fourier transforms
 help stats % help overview for statistics toolbox (if you have it installed)
+help elfun
+help elmat
+help syntax
 
 which + %which function '+' are you using? (can be used with any function)
 clc % clear command window
 why(1000) % a primitive Siri
-%eval % useful for automated data input
-%pack % memory defrag. might help if ?out of memory? errors are getting you down
-%squeeze % get rid of empty dimensions
-%sparse % converts a full matrix to sparse form
+% eval % useful for automated data input
+% pack % memory defrag. might help if ?out of memory? errors are getting you down
+% squeeze % get rid of empty dimensions
+% sparse % converts a full matrix to sparse form
 % data input functions?
 % dbstop if error
 % keyboard %for debugging within functions; type 'return' to exit
+% stats %needs stats toolbox
 
 %From KyleF
 % bsxfun
